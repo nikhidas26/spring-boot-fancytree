@@ -36,7 +36,7 @@
 
     </script>
 
-    <c:url value="/css/main.css" var="jstlCss" />
+    <c:url value="main.css" var="jstlCss" />
     <link href="${jstlCss}" rel="stylesheet" />
 
 </head>
@@ -70,8 +70,6 @@
             </div>
         </div>
     </div>
-
-	<!-- /.container -->
 
 
 
