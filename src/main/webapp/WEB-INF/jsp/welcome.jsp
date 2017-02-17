@@ -20,13 +20,13 @@
         $(document).ready(function(){
 
             // Load tree from Ajax JSON
-            $("#tree2").fancytree({
+            $("#fancyTreeDivId").fancytree({
                   source: {
-                    url: "ajax-tree-plain.json"
+                    url: "${pageContext.request.contextPath}/json/getChildren?isRoot=true"
                   },
                   lazyLoad: function(event, data){
                     data.result = $.ajax({
-                      url: "ajax-sub2.json",
+                      url: "${pageContext.request.requestURL}/json/getChildren",
                       dataType: "json"
                     });
                   }
