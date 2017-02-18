@@ -3,7 +3,10 @@ package com.nikhil;
 import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.gson.GsonAutoConfiguration;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -16,21 +19,32 @@ import java.util.List;
 /**
  * Created by Nikhil on 2/12/17.
  */
+@Controller
 public class FancyTreeController {
 
     private final Logger LOG = LoggerFactory.getLogger(this.getClass());
 
+
+    @Value("${unix.path}")
+    public String unixRootPath;
+
     @RequestMapping(value="/json/getChildren", method = RequestMethod.GET)
     @ResponseBody
-    public String getFileTreeInfo(String isRoot, String path) {
+    public String getFileTreeInfo(String parent) {
 
         String json;
-        String rootPath = "/Users/nikhil_das23";
+        String rootPath = unixRootPath;
 
-        File rootFile = new File(rootPath);
+        if(parent.trim().isEmpty()) {
+            json = getChildren(rootPath, true);
+        } else {
+            json = getChildren(rootPath, false);
 
-        return null;
+        }
 
+        json = '[' + json + ']';
+
+        return json;
     }
 
     public String getChildren(String rootFolderPath, Boolean isRoot) {
@@ -39,29 +53,34 @@ public class FancyTreeController {
         FancyTreeNode fancyTreeNode = new FancyTreeNode();
 
         if(isRoot) {
-            fancyTreeNode.setFolder(false);
+            fancyTreeNode.setId(rootFolderPath);
             fancyTreeNode.setKey(rootFolderPath);
             fancyTreeNode.setFolder(true);
-            fancyTreeNode.setTitle(rootFolderPath.substring(rootFolderPath.indexOf("/")));
-            fancyTreeNode.setDisplayPath(rootFolderPath.substring(rootFolderPath.indexOf("/")));
+            fancyTreeNode.setTitle(rootFolderPath.substring(rootFolderPath.lastIndexOf(File.separator) + 1));
+            fancyTreeNode.setDisplayPath(rootFolderPath.substring(rootFolderPath.lastIndexOf(File.separator) + 1));
         }
 
         LOG.info("Fetching children under " + rootFolderPath);
 
-        String[] childFiles = rootFolder.list();
+        File[] childFiles = rootFolder.listFiles();
         if(childFiles != null) {
-            for(String childFilePath: childFiles) {
-                FancyTreeNodeChild fancyTreeNodeChild = new FancyTreeNodeChild();
-                File child = new File(childFilePath);
-                if(child.isFile()) {
-                    fancyTreeNodeChild.setFolder(true);
-                } else {
-                    fancyTreeNodeChild.setFolder(false);
+            for(File childFile: childFiles) {
+                if(!childFile.isHidden()) {
+                    FancyTreeNodeChild fancyTreeNodeChild = new FancyTreeNodeChild();
+                    if(childFile.isFile()) {
+                        fancyTreeNodeChild.setFolder(false);
+                    } else {
+                        fancyTreeNodeChild.setFolder(true);
+                    }
+                    String absolutePath = childFile.getAbsolutePath();
+                    String title = absolutePath.substring(absolutePath.lastIndexOf("/") + 1);
+                    fancyTreeNodeChild.setId(absolutePath);
+                    fancyTreeNodeChild.setKey(absolutePath);
+                    fancyTreeNodeChild.setTitle(title);
+                    fancyTreeNodeChild.setDisplayPath(title);
+                    fancyTreeNode.getChildren().add(fancyTreeNodeChild);
                 }
-                fancyTreeNodeChild.setKey(child.getAbsolutePath());
-                fancyTreeNodeChild.setTitle(childFilePath.substring(childFilePath.indexOf("/")));
-                fancyTreeNodeChild.setDisplayPath(childFilePath.substring(childFilePath.indexOf("/")));
-                fancyTreeNode.getChildren().add(fancyTreeNodeChild);
+
             }
         } else {
             LOG.info("No children found under folder " + rootFolderPath);

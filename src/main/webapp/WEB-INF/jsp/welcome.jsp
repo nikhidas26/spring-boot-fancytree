@@ -4,14 +4,15 @@
 <html lang="en">
 <head>
 
-    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="/webjars/jquery-ui/1.12.1/themes/base/jquery-ui.min.css"
-    <link rel="stylesheet" type="text/css" href="/webjars/github-com-mar10-fancytree/2.21.0/dist/skin-win8/ui.fancytree.min.css" />
+    <link rel="stylesheet" type="text/css" href="/webjars/github-com-mar10-fancytree/2.21.0/dist/skin-lion/ui.fancytree.css" />
 
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/webjars/jquery-ui/1.12.1/themes/base/jquery-ui.min.css"/>
 
     <script type="text/javascript" src="/webjars/jquery/3.1.1/jquery.min.js"></script>
     <script type="text/javascript" src="/webjars/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/webjars/jquery-ui/1.12.1/jquery-ui.min.js"></script>
+
     <script type="text/javascript" src="/webjars/github-com-mar10-fancytree/2.21.0/dist/jquery.fancytree-all.min.js"></script>
 
 
@@ -22,13 +23,24 @@
             // Load tree from Ajax JSON
             $("#fancyTreeDivId").fancytree({
                   source: {
-                    url: "${pageContext.request.contextPath}/json/getChildren?isRoot=true"
+                    url: "${pageContext.request.contextPath}/json/getChildren?parent="
                   },
+                  imagePath: '/webjars/github-com-mar10-fancytree/2.21.0/dist/skin-lion',
+                  checkbox: true,
+                  selectMode: 3,
+                  quicksearch: true,
                   lazyLoad: function(event, data){
-                    data.result = $.ajax({
-                      url: "${pageContext.request.requestURL}/json/getChildren",
-                      dataType: "json"
-                    });
+                    var node = data.node;
+                    data.result = {
+                        url: "${pageContext.request.contextPath}/json/getChildren",
+                        data: {
+                            mode:'children',
+                            parent: node.key
+                        }
+                    }
+                  },
+                  loadChildren: function(event, data){
+                    data.node.fixSelection3AfterClick();
                   }
             });
 

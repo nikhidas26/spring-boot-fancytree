@@ -27,6 +27,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+		</dependency>
 		
 		<!-- Web with Tomcat + Embed -->
 		<dependency>
@@ -87,6 +92,14 @@
 			<artifactId>github-com-mar10-fancytree</artifactId>
 			<version>2.21.0</version>
 		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.webjars/fancytree -->
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>fancytree</artifactId>
+			<version>2.3.0</version>
+		</dependency>
+
 
 		<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
 		<dependency>

@@ -5,15 +5,25 @@ package com.nikhil;
  */
 public class FancyTreeNodeChild {
 
+    private String id;
+
     private String key;
 
     private String size;
 
     private String title;
 
-    private boolean isFolder;
+    private boolean folder;
 
     private String displayPath;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getKey() {
         return key;
@@ -40,11 +50,11 @@ public class FancyTreeNodeChild {
     }
 
     public boolean isFolder() {
-        return isFolder;
+        return folder;
     }
 
     public void setFolder(boolean folder) {
-        isFolder = folder;
+        this.folder = folder;
     }
 
     public String getDisplayPath() {

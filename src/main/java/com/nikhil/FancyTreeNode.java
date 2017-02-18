@@ -1,5 +1,6 @@
 package com.nikhil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -7,15 +8,25 @@ import java.util.List;
  */
 public class FancyTreeNode {
 
+    private String id;
+
     private String key;
 
     private String title;
 
-    private boolean isFolder;
+    private boolean folder;
 
     private String displayPath;
 
     private String size;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getKey() {
         return key;
@@ -33,7 +44,7 @@ public class FancyTreeNode {
         this.size = size;
     }
 
-    private List<FancyTreeNodeChild> children;
+    private List<FancyTreeNodeChild> children = new ArrayList<>();
 
     public String getTitle() {
         return title;
@@ -44,11 +55,11 @@ public class FancyTreeNode {
     }
 
     public boolean isFolder() {
-        return isFolder;
+        return folder;
     }
 
     public void setFolder(boolean folder) {
-        isFolder = folder;
+        this.folder = folder;
     }
 
     public List<FancyTreeNodeChild> getChildren() {
