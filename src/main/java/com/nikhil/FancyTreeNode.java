@@ -16,9 +16,11 @@ public class FancyTreeNode {
 
     private boolean folder;
 
-    private String displayPath;
-
     private String size;
+
+    private boolean lazy;
+
+    private List<FancyTreeNodeChild> children = new ArrayList<>();
 
     public String getId() {
         return id;
@@ -44,8 +46,6 @@ public class FancyTreeNode {
         this.size = size;
     }
 
-    private List<FancyTreeNodeChild> children = new ArrayList<>();
-
     public String getTitle() {
         return title;
     }
@@ -70,11 +70,11 @@ public class FancyTreeNode {
         this.children = children;
     }
 
-    public String getDisplayPath() {
-        return displayPath;
+    public boolean isLazy() {
+        return lazy;
     }
 
-    public void setDisplayPath(String displayPath) {
-        this.displayPath = displayPath;
+    public void setLazy(boolean lazy) {
+        this.lazy = lazy;
     }
 }

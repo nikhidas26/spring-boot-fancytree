@@ -15,7 +15,7 @@ public class FancyTreeNodeChild {
 
     private boolean folder;
 
-    private String displayPath;
+    private boolean lazy;
 
     public String getId() {
         return id;
@@ -57,11 +57,11 @@ public class FancyTreeNodeChild {
         this.folder = folder;
     }
 
-    public String getDisplayPath() {
-        return displayPath;
+    public boolean isLazy() {
+        return lazy;
     }
 
-    public void setDisplayPath(String displayPath) {
-        this.displayPath = displayPath;
+    public void setLazy(boolean lazy) {
+        this.lazy = lazy;
     }
 }

@@ -24,6 +24,7 @@
             $("#fancyTreeDivId").fancytree({
                   source: {
                     url: "${pageContext.request.contextPath}/json/getChildren?parent="
+                    //url: "sample/ajax-sub2.json"
                   },
                   imagePath: '/webjars/github-com-mar10-fancytree/2.21.0/dist/skin-lion',
                   checkbox: true,
@@ -36,11 +37,15 @@
                         data: {
                             mode:'children',
                             parent: node.key
-                        }
+                        },
+                        cache: false
                     }
                   },
                   loadChildren: function(event, data){
                     data.node.fixSelection3AfterClick();
+                  },
+                  collapse: function(event, data) {
+                    data.node.resetLazy();
                   }
             });
 
@@ -48,8 +53,7 @@
 
     </script>
 
-    <c:url value="main.css" var="jstlCss" />
-    <link href="${jstlCss}" rel="stylesheet" />
+    <link href="main.css" rel="stylesheet" />
 
 </head>
 <body>
@@ -60,8 +64,6 @@
 			</div>
 			<div id="navbar" class="collapse navbar-collapse">
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="#">Home</a></li>
-					<li><a href="#about">About</a></li>
 				</ul>
 			</div>
 		</div>
@@ -71,13 +73,9 @@
         <div class="row">
             <div class="col-lg-6">
 
-            <div id="fancyTreeDivId" data-source="ajax" class="sampletree">
+                <div id="fancyTreeDivId" data-source="ajax" class="sampletree">
 
-            </div>
-
-            </div>
-            <div class="col-lg-6">
-                Container Right
+                </div>
             </div>
         </div>
     </div>

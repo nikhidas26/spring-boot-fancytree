@@ -28,21 +28,31 @@ public class FancyTreeController {
     @Value("${unix.path}")
     public String unixRootPath;
 
+    @Value("${windows.path}")
+    public String windowsRootPath;
+
     @RequestMapping(value="/json/getChildren", method = RequestMethod.GET)
     @ResponseBody
     public String getFileTreeInfo(String parent) {
 
         String json;
+
         String rootPath = unixRootPath;
+
+        if(OSValidator.isWindows()) {
+            rootPath = windowsRootPath;
+        } else {
+            rootPath = unixRootPath;
+        }
+
 
         if(parent.trim().isEmpty()) {
             json = getChildren(rootPath, true);
+            json = '[' + json + ']';
         } else {
-            json = getChildren(rootPath, false);
-
+            json = getChildren(parent, false);
+            json = json.substring(json.indexOf('['), json.lastIndexOf(']') + 1);
         }
-
-        json = '[' + json + ']';
 
         return json;
     }
@@ -57,7 +67,6 @@ public class FancyTreeController {
             fancyTreeNode.setKey(rootFolderPath);
             fancyTreeNode.setFolder(true);
             fancyTreeNode.setTitle(rootFolderPath.substring(rootFolderPath.lastIndexOf(File.separator) + 1));
-            fancyTreeNode.setDisplayPath(rootFolderPath.substring(rootFolderPath.lastIndexOf(File.separator) + 1));
         }
 
         LOG.info("Fetching children under " + rootFolderPath);
@@ -69,15 +78,16 @@ public class FancyTreeController {
                     FancyTreeNodeChild fancyTreeNodeChild = new FancyTreeNodeChild();
                     if(childFile.isFile()) {
                         fancyTreeNodeChild.setFolder(false);
+                        fancyTreeNodeChild.setLazy(false);
                     } else {
                         fancyTreeNodeChild.setFolder(true);
+                        fancyTreeNodeChild.setLazy(true);
                     }
                     String absolutePath = childFile.getAbsolutePath();
                     String title = absolutePath.substring(absolutePath.lastIndexOf("/") + 1);
                     fancyTreeNodeChild.setId(absolutePath);
                     fancyTreeNodeChild.setKey(absolutePath);
                     fancyTreeNodeChild.setTitle(title);
-                    fancyTreeNodeChild.setDisplayPath(title);
                     fancyTreeNode.getChildren().add(fancyTreeNodeChild);
                 }
 
